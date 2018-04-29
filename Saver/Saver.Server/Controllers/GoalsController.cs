@@ -10,7 +10,9 @@ namespace Saver.Server.Controllers
     /// <summary>
     /// Provides the controller endpoints for all Goals
     /// </summary>
-    [Authorize]
+    [RoutePrefix("api")]
+    [Route("users/{userId:int}/goals")]
+    //[Authorize]
     public class GoalsController : ApiController
     {
         // GET api/user/{userID}/goals
@@ -18,14 +20,16 @@ namespace Saver.Server.Controllers
         /// Returns the collection of goals for the user
         /// with the given ID
         /// </summary>
-        /// <param name="userID">The ID of the user for which we are returning goals</param>
+        /// <param name="userId">The ID of the user for which we are returning goals</param>
         /// <returns>A collection of goals for the user</returns>
-        public IEnumerable<string> Get(int userID)
+        public IEnumerable<string> Get(int userId)
         {
             return new string[] { "value1", "value2" };
         }
 
         // GET api/user/{userID}/goals/{id}
+        [HttpGet]
+        [Route("{id:int}")]
         public string Get(int userID, int id)
         {
             return "value";

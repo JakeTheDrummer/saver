@@ -55,7 +55,7 @@ namespace Saver.Server
             //    consumerKey: "",
             //    consumerSecret: "");
 
-            app.UseFacebookAuthentication(
+            /*app.UseFacebookAuthentication(
                 appId: "",
                 appSecret: "");
 
@@ -63,7 +63,7 @@ namespace Saver.Server
             {
                 ClientId = "",
                 ClientSecret = ""
-            });
+            });*/
         }
     }
 }
