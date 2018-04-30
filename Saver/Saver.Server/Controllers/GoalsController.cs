@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Saver.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -22,9 +23,14 @@ namespace Saver.Server.Controllers
         /// </summary>
         /// <param name="userId">The ID of the user for which we are returning goals</param>
         /// <returns>A collection of goals for the user</returns>
-        public IEnumerable<string> Get(int userId)
+        public IEnumerable<Goal> Get(int userId)
         {
-            return new string[] { "value1", "value2" };
+            //Return the goals
+            return new Goal[] 
+            {
+                new Goal(1, "Test Goal A", "A", 150, GoalStatus.Open, false),
+                new Goal(2, "Test Goal B", "B", 500, GoalStatus.Complete, false),
+            };
         }
 
         // GET api/users/{userID}/goals/{id}
@@ -37,9 +43,9 @@ namespace Saver.Server.Controllers
         /// <returns>The goal with the matching User ID and Goal ID</returns>
         [HttpGet]
         [Route("{id:int:min(1)}")]
-        public string Get(int userID, int id)
+        public Goal Get(int userID, int id)
         {
-            return "value";
+            return new Goal(1, "Test Goal A", "A", 150, GoalStatus.Open, false);
         }
 
         // POST api/users/{userID}/goals/{id}
@@ -49,7 +55,7 @@ namespace Saver.Server.Controllers
         /// <param name="userId">The ID of the user for the goal</param>
         /// <param name="goal">The goal the user wishes to create</param>
         [HttpPost]
-        public string Post(int userId, [FromBody]string goal)
+        public Goal Post(int userId, [FromBody]Goal goal)
         {
             throw new NotImplementedException();
         }
@@ -64,7 +70,7 @@ namespace Saver.Server.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("{id:int:min(1)}")]
-        public string Put(int userId, int id, [FromBody]string value)
+        public Goal Put(int userId, int id, [FromBody]Goal value)
         {
             throw new NotImplementedException();
         }

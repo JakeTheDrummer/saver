@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Web.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Saver.Model;
 using Saver.Server;
 using Saver.Server.Controllers;
 
@@ -18,6 +19,16 @@ namespace Saver.Server.IntegrationTests.Controllers
     {
         private const int USERID = 1;
         private const int GOALID = 1;
+        Goal goal = null;
+
+        /// <summary>
+        /// Run this on the initialiser of all tests
+        /// </summary>
+        [TestInitialize]
+        public void TestInitialise()
+        {
+            this.goal = new Goal(3, "Test C", "C", 500, GoalStatus.Open, false);
+        }
 
         /// <summary>
         /// Should test that the server locates the correct
@@ -30,13 +41,10 @@ namespace Saver.Server.IntegrationTests.Controllers
             GoalsController controller = new GoalsController();
 
             // Act
-            IEnumerable<string> result = controller.Get(USERID);
+            IEnumerable<Goal> result = controller.Get(USERID);
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(2, result.Count());
-            Assert.AreEqual("value1", result.ElementAt(0));
-            Assert.AreEqual("value2", result.ElementAt(1));
         }
 
         /// <summary>
@@ -50,10 +58,10 @@ namespace Saver.Server.IntegrationTests.Controllers
             GoalsController controller = new GoalsController();
 
             // Act
-            string result = controller.Get(USERID, GOALID);
+            Goal result = controller.Get(USERID, GOALID);
 
             // Assert
-            Assert.AreEqual("value", result);
+            Assert.IsNotNull(result);
         }
 
         [TestMethod]
@@ -63,7 +71,7 @@ namespace Saver.Server.IntegrationTests.Controllers
             GoalsController controller = new GoalsController();
 
             // Act
-            controller.Post("value");
+            controller.Post(USERID, goal);
 
             // Assert
         }
@@ -75,7 +83,7 @@ namespace Saver.Server.IntegrationTests.Controllers
             GoalsController controller = new GoalsController();
 
             // Act
-            controller.Put(5, "value");
+            controller.Put(USERID, GOALID, goal);
 
             // Assert
         }
@@ -87,7 +95,7 @@ namespace Saver.Server.IntegrationTests.Controllers
             GoalsController controller = new GoalsController();
 
             // Act
-            controller.Delete(5);
+            controller.Delete(USERID, GOALID);
 
             // Assert
         }
