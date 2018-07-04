@@ -81,11 +81,15 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Credentials\SaverDatabaseConnectionStringProviderTests.cs" />
     <Compile Include="Factories\MySQLDataAccessFactoryTests.cs" />
     <Compile Include="Objects\MySQLDataAccessTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

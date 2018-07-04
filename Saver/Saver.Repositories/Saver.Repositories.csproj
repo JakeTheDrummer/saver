@@ -40,7 +40,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementations\Goal\GoalRepository.cs" />
+    <Compile Include="Implementations\RepositoryBase.cs" />
+    <Compile Include="Implementations\SqlRepositoryBase.cs" />
+    <Compile Include="Interfaces\IGoalRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\EmbeddedResourceSqlStringService.cs" />
+    <Compile Include="Services\Exceptions\ResourceNotFoundException.cs" />
+    <Compile Include="Services\Interfaces\ISqlStringService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Saver.DataAccess\Saver.DataAccess.csproj">
+      <Project>{137B0AB7-0B90-4500-9129-EC9BFE6ABF6F}</Project>
+      <Name>Saver.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Saver.Model\Saver.Model.csproj">
+      <Project>{8F4A3976-88E1-4CC6-93FB-33523EE366CA}</Project>
+      <Name>Saver.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

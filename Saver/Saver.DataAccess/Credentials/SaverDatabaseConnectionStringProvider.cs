@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,8 +20,12 @@ namespace Saver.DataAccess.Credentials
         /// <returns>The connection string stored in the web configuration</returns>
         public string GetConnectionString(string environment)
         {
-            string connectionString = WebConfigurationManager.ConnectionStrings[environment].ConnectionString;
-            return connectionString;
+            //Make sure it exists
+            ConnectionStringSettings connectionString = WebConfigurationManager.ConnectionStrings[environment];
+            if (connectionString == null)
+                throw new ArgumentOutOfRangeException(nameof(environment), $"Please ensure that the environment {environment} is provided in the web.config file");
+            
+            return connectionString.ConnectionString;
         }
     }
 }

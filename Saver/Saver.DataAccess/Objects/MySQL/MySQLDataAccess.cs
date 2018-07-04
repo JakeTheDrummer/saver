@@ -1,4 +1,6 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Dapper;
+using MySql.Data.MySqlClient;
+using Saver.DataAccess.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,7 +13,7 @@ namespace Saver.DataAccess.Objects.MySQL
     /// <summary>
     /// Provides access to the MySQL database
     /// </summary>
-    public class MySQLDataAccess : DataAccessBase
+    public class MySQLDataAccess : DataAccessBase, ITypedDataAccess
     {
         /// <summary>
         /// Creates a new MySQL Data Access Object
@@ -59,7 +61,7 @@ namespace Saver.DataAccess.Objects.MySQL
                 throw new ArgumentException("Please ensure that SQL is provided to be run", nameof(sql));
 
             //Call the following code with an open connection
-            DataTable resultTable = ExecuteThenClose<DataTable>
+            DataTable resultTable = ExecuteThenClose
             (
                 (connection =>
                 {
@@ -84,6 +86,31 @@ namespace Saver.DataAccess.Objects.MySQL
             return resultTable;
         }
 
+
+        /// <summary>
+        /// Returns the typed objects of type T from the database
+        /// using the SQL statement and parameters given
+        /// </summary>
+        /// <typeparam name="T">The type to return</typeparam>
+        /// <param name="sql">The SQL returning the type</param>
+        /// <param name="parameters">The parameters that we wish to use in the query</param>
+        /// <returns>An enumerable of type T from the data storage</returns>
+        public IEnumerable<T> ExecuteQuery<T>(string sql, Dictionary<string, object> parameters)
+        {
+            IEnumerable<T> results = ExecuteThenClose
+            (
+                (connection =>
+                {
+                    CommandDefinition command = new CommandDefinition(sql, parameters);
+
+                    //Collect the query through dapper
+                    IEnumerable<T> queryResult = connection.Query<T>(command);
+                    return queryResult;
+                }),
+                OnConnectionErrored, OnDisconnectionErrored
+            );
+            return results;
+        }
 
         /// <summary>
         /// Parameterises the command if any parameters have been provided
