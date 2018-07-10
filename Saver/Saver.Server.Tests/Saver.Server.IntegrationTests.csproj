@@ -122,6 +122,10 @@
       <Project>{8F4A3976-88E1-4CC6-93FB-33523EE366CA}</Project>
       <Name>Saver.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Saver.Repositories\Saver.Repositories.csproj">
+      <Project>{3396A109-A2FD-4387-A8BC-FB261D146AC8}</Project>
+      <Name>Saver.Repositories</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Saver.Server\Saver.Server.csproj">
       <Project>{A434BB50-17D7-45E6-A5EA-BEB6F4C3919F}</Project>
       <Name>Saver.Server</Name>

@@ -78,6 +78,10 @@
       <Project>{137B0AB7-0B90-4500-9129-EC9BFE6ABF6F}</Project>
       <Name>Saver.DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Saver.Model\Saver.Model.csproj">
+      <Project>{8F4A3976-88E1-4CC6-93FB-33523EE366CA}</Project>
+      <Name>Saver.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Saver.Repositories\Saver.Repositories.csproj">
       <Project>{3396A109-A2FD-4387-A8BC-FB261D146AC8}</Project>
       <Name>Saver.Repositories</Name>

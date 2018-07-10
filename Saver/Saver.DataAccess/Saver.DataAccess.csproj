@@ -60,7 +60,10 @@
   <ItemGroup>
     <Compile Include="Credentials\IConnectionStringProvider.cs" />
     <Compile Include="Credentials\SaverDatabaseConnectionStringProvider.cs" />
+    <Compile Include="Factories\DataAccessFactoryBase.cs" />
     <Compile Include="Factories\Interfaces\IDataAccessFactory.cs" />
+    <Compile Include="Factories\Interfaces\ITypedDataAccessFactory.cs" />
+    <Compile Include="Factories\TypedMySQLDataAccessFactory.cs" />
     <Compile Include="Factories\MySQLDataAccessFactory.cs" />
     <Compile Include="Interfaces\IDataAccess.cs" />
     <Compile Include="Interfaces\ITypedDataAccess.cs" />

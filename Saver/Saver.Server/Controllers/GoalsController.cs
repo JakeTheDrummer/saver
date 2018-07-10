@@ -1,4 +1,5 @@
 ﻿using Saver.Model;
+using Saver.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,18 @@ namespace Saver.Server.Controllers
     //[Authorize]
     public class GoalsController : ApiController
     {
+        IGoalRepository goalRepository = null;
+
+        /// <summary>
+        /// Creates the new Goals controller and obtains
+        /// the goal repository from the unity container
+        /// </summary>
+        /// <param name="goalRepository">The goal repository required for the controller</param>
+        public GoalsController(IGoalRepository goalRepository)
+        {
+            this.goalRepository = goalRepository;
+        }
+
         // GET api/users/{userID}/goals
         /// <summary>
         /// Returns the collection of goals for the user
@@ -42,10 +55,12 @@ namespace Saver.Server.Controllers
         /// <param name="id">The ID of the goal</param>
         /// <returns>The goal with the matching User ID and Goal ID</returns>
         [HttpGet]
-        [Route("{id:int:min(1)}")]
+        [Route("users/{userId:int:min(1)}/goals/{id:int:min(1)}")]
         public Goal Get(int userID, int id)
         {
-            return new Goal(1, "Test Goal A", "A", 150, GoalStatus.Open, false);
+            //Return the goal
+            Goal goal = goalRepository.GetGoal(id);
+            return goal;
         }
 
         // POST api/users/{userID}/goals/{id}

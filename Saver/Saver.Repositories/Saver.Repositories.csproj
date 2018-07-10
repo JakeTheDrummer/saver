@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\SqlResourceAttribute.cs" />
     <Compile Include="Implementations\Goal\GoalRepository.cs" />
     <Compile Include="Implementations\RepositoryBase.cs" />
     <Compile Include="Implementations\SqlRepositoryBase.cs" />
@@ -59,8 +60,9 @@
       <Name>Saver.Model</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <EmbeddedResource Include="Resources\Sql\Goal\GetGoalById.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

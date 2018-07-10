@@ -1,0 +1,1 @@
+﻿SELECT Id, Name, Description, Target, UserId, StatusId, IsDefault FROM saver.goal WHERE Id = @Id;

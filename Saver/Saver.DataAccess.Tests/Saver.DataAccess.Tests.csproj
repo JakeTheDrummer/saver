@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="Credentials\SaverDatabaseConnectionStringProviderTests.cs" />
     <Compile Include="Factories\MySQLDataAccessFactoryTests.cs" />
+    <Compile Include="Factories\TypedMySQLDataAccessFactoryTests.cs" />
     <Compile Include="Objects\MySQLDataAccessTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
