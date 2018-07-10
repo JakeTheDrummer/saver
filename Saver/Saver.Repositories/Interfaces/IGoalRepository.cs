@@ -21,6 +21,12 @@ namespace Saver.Repositories.Interfaces
         Goal GetGoal(int goalID);
 
         /// <summary>
+        /// Returns all the goals on the system
+        /// </summary>
+        /// <returns>The goals on the system</returns>
+        IEnumerable<Goal> GetGoals();
+
+        /// <summary>
         /// Returns all the goals for the user
         /// </summary>
         /// <param name="userID">The ID of the User</param>

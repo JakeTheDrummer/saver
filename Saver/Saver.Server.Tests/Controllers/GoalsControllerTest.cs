@@ -10,6 +10,7 @@ using Saver.Model;
 using Saver.Repositories.Interfaces;
 using Saver.Server;
 using Saver.Server.Controllers;
+using Saver.Services.Interfaces;
 
 namespace Saver.Server.IntegrationTests.Controllers
 {
@@ -19,7 +20,7 @@ namespace Saver.Server.IntegrationTests.Controllers
     [TestClass]
     public class GoalsControllerTest
     {
-        Mock<IGoalRepository> mockGoalRepository = null;
+        Mock<IGoalService> mockGoalService = null;
         private const int USERID = 1;
         private const int GOALID = 1;
         Goal goal = null;
@@ -29,7 +30,7 @@ namespace Saver.Server.IntegrationTests.Controllers
         /// </summary>
         public GoalsControllerTest()
         {
-            mockGoalRepository = new Mock<IGoalRepository>();
+            mockGoalService = new Mock<IGoalService>();
             this.goal = new Goal(3, "Test C", "C", 500, GoalStatus.Open, false);
         }
 
@@ -41,7 +42,7 @@ namespace Saver.Server.IntegrationTests.Controllers
         public void Get_ShouldTestAPositiveGetRequestForUserGoals()
         {
             // Arrange
-            GoalsController controller = new GoalsController(mockGoalRepository.Object);
+            GoalsController controller = new GoalsController(mockGoalService.Object);
 
             // Act
             IEnumerable<Goal> result = controller.Get(USERID);
@@ -58,7 +59,7 @@ namespace Saver.Server.IntegrationTests.Controllers
         public void Get_ShouldReturnAKnownUserGoalByUserIDAndGoalID()
         {
             // Arrange
-            GoalsController controller = new GoalsController(mockGoalRepository.Object);
+            GoalsController controller = new GoalsController(mockGoalService.Object);
 
             // Act
             Goal result = controller.Get(USERID, GOALID);
@@ -71,7 +72,7 @@ namespace Saver.Server.IntegrationTests.Controllers
         public void Post()
         {
             // Arrange
-            GoalsController controller = new GoalsController(mockGoalRepository.Object);
+            GoalsController controller = new GoalsController(mockGoalService.Object);
 
             // Act
             controller.Post(USERID, goal);
@@ -83,7 +84,7 @@ namespace Saver.Server.IntegrationTests.Controllers
         public void Put()
         {
             // Arrange
-            GoalsController controller = new GoalsController(mockGoalRepository.Object);
+            GoalsController controller = new GoalsController(mockGoalService.Object);
 
             // Act
             controller.Put(USERID, GOALID, goal);
@@ -95,7 +96,7 @@ namespace Saver.Server.IntegrationTests.Controllers
         public void Delete()
         {
             // Arrange
-            GoalsController controller = new GoalsController(mockGoalRepository.Object);
+            GoalsController controller = new GoalsController(mockGoalService.Object);
 
             // Act
             controller.Delete(USERID, GOALID);

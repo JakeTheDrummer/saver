@@ -1,5 +1,6 @@
 ﻿using Saver.Model;
 using Saver.Repositories.Interfaces;
+using Saver.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,17 +18,29 @@ namespace Saver.Server.Controllers
     //[Authorize]
     public class GoalsController : ApiController
     {
-        IGoalRepository goalRepository = null;
+        IGoalService goalService = null;
 
         /// <summary>
         /// Creates the new Goals controller and obtains
         /// the goal repository from the unity container
         /// </summary>
-        /// <param name="goalRepository">The goal repository required for the controller</param>
-        public GoalsController(IGoalRepository goalRepository)
+        /// <param name="goalService">The goal repository required for the controller</param>
+        public GoalsController(IGoalService goalService)
         {
-            this.goalRepository = goalRepository;
+            this.goalService = goalService;
         }
+
+        /// <summary>
+        /// Returns all goals regardless of users -- This should
+        /// not be included in the final release of the service
+        /// </summary>
+        /// <returns>All goals on the system</returns>
+        [Route("goals")]
+        public IEnumerable<Goal> Get()
+        {
+            return goalService.GetGoals();
+        }
+
 
         // GET api/users/{userID}/goals
         /// <summary>
@@ -59,7 +72,7 @@ namespace Saver.Server.Controllers
         public Goal Get(int userID, int id)
         {
             //Return the goal
-            Goal goal = goalRepository.GetGoal(id);
+            Goal goal = goalService.GetGoal(id);
             return goal;
         }
 

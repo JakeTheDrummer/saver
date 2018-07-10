@@ -11,8 +11,8 @@ namespace Saver.Model
     /// </summary>
     public enum GoalStatus
     {
-        Open,
-        Complete,
-        Cancelled
+        Open = 1,
+        Complete = 2,
+        Cancelled = 3
     }
 }

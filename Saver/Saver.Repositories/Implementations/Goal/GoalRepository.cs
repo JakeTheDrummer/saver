@@ -1,4 +1,5 @@
 ﻿using Saver.DataAccess.Interfaces;
+using Saver.Model;
 using Saver.Repositories.Attributes;
 using Saver.Repositories.Interfaces;
 using Saver.Repositories.Services.Interfaces;
@@ -47,6 +48,17 @@ namespace Saver.Repositories.Implementations.Goal
             //Load the goal
             Model.Goal goal = typedDataAccess.ExecuteQuery<Model.Goal>(sql, parameters).First();
             return goal;
+        }
+
+        /// <summary>
+        /// Returns all the Goals on the system
+        /// </summary>
+        /// <returns>All the goals on the system</returns>
+        [SqlResource(@"Goal\GetAllGoals")]
+        public IEnumerable<Model.Goal> GetGoals()
+        {
+            string sql = LoadSqlResources().Values.First();
+            return typedDataAccess.ExecuteQuery<Model.Goal>(sql, null);
         }
 
         /// <summary>

@@ -60,7 +60,9 @@
       <Name>Saver.Model</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sql\Goal\GetAllGoals.sql" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Sql\Goal\GetGoalById.sql" />
   </ItemGroup>

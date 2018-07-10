@@ -67,9 +67,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GoalServiceUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Saver.Model\Saver.Model.csproj">
+      <Project>{8F4A3976-88E1-4CC6-93FB-33523EE366CA}</Project>
+      <Name>Saver.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Saver.Repositories\Saver.Repositories.csproj">
+      <Project>{3396A109-A2FD-4387-A8BC-FB261D146AC8}</Project>
+      <Name>Saver.Repositories</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Saver.Services\Saver.Services.csproj">
+      <Project>{599A2808-D428-47FD-9B93-DBB98D50B8B1}</Project>
+      <Name>Saver.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

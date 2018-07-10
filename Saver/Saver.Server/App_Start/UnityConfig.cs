@@ -6,6 +6,8 @@ using Saver.Repositories.Implementations.Goal;
 using Saver.Repositories.Interfaces;
 using Saver.Repositories.Services;
 using Saver.Repositories.Services.Interfaces;
+using Saver.Services.Implementations;
+using Saver.Services.Interfaces;
 using System.Reflection;
 using System.Web.Http;
 using Unity;
@@ -41,6 +43,10 @@ namespace Saver.Server
             (
                 new InjectionConstructor(container.Resolve<ITypedDataAccess>(), container.Resolve<ISqlStringService>())
             );
+
+
+            //Ensure we have the services ready
+            container.RegisterType<IGoalService, GoalService>(new InjectionConstructor(container.Resolve<IGoalRepository>()));
             
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
         }

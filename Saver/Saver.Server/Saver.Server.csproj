@@ -355,6 +355,10 @@
       <Project>{3396A109-A2FD-4387-A8BC-FB261D146AC8}</Project>
       <Name>Saver.Repositories</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Saver.Services\Saver.Services.csproj">
+      <Project>{599A2808-D428-47FD-9B93-DBB98D50B8B1}</Project>
+      <Name>Saver.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -130,6 +130,10 @@
       <Project>{A434BB50-17D7-45E6-A5EA-BEB6F4C3919F}</Project>
       <Name>Saver.Server</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Saver.Services\Saver.Services.csproj">
+      <Project>{599A2808-D428-47FD-9B93-DBB98D50B8B1}</Project>
+      <Name>Saver.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
