@@ -54,7 +54,7 @@ namespace Saver.Model
         /// <summary>
         /// Returns the ID of the Goal
         /// </summary>
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Gets or sets the Name of the Goal
@@ -79,6 +79,6 @@ namespace Saver.Model
         /// <summary>
         /// Returns whether this is the default user goal in the collection
         /// </summary>
-        public bool IsDefault { get; private set; }
+        public bool IsDefault { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace Saver.Services.Implementations
     /// interactivity with the database and provides
     /// simple logic to perform actions
     /// </summary>
-    public class GoalService : IGoalService
+    public class GoalService : ServiceBase, IGoalService
     {
         IGoalRepository goalRepository = null;
 
@@ -56,18 +56,40 @@ namespace Saver.Services.Implementations
         /// <returns>The goals on the system</returns>
         public IEnumerable<Goal> GetGoals()
         {
-            IEnumerable<Goal> goals = goalRepository.GetGoals();
-            return goals == null ? null : goals.OrderBy(g => g.Id);
+            return ExecuteThenOrderBy(goalRepository.GetGoals, g => g.Id);
+        }
+
+        /// <summary>
+        /// Returns all goals on the system for the given user
+        /// </summary>
+        /// <param name="userID">The ID of the user</param>
+        /// <returns>The goals on the system the user</returns>
+        public IEnumerable<Goal> GetGoalsForUser(int userID)
+        {
+            return ExecuteThenOrderBy(() => goalRepository.GetGoalsForUser(userID), g => g.Id);
         }
 
         /// <summary>
         /// Attempts to save the goal on the system
         /// and returns the value stored in the database
         /// </summary>
-        /// <param name="id">The ID (if existing)</param>
+        /// <param name="userId">The User ID</param>
         /// <param name="goal">The goal to be persisted</param>
         /// <returns>The goal that was saved on the system</returns>
-        public Goal SaveGoal(int? id, Goal goal)
+        public Goal CreateGoal(int? userId, Goal goal)
+        {
+            //Ensure we have valid data
+            if (!userId.HasValue)
+                throw new ArgumentOutOfRangeException(nameof(userId), "Please ensure the user is given when creating the goal");
+            if (goal.Id > 0)
+                throw new ArgumentOutOfRangeException(nameof(goal.Id), "Please ensure the goal has no identifying information when creating");
+
+            //Create the goal
+            Goal savedGoal = goalRepository.CreateGoalForUser(userId.Value, goal);
+            return savedGoal;
+        }
+
+        public Goal UpdateGoal(Goal goal)
         {
             throw new NotImplementedException();
         }

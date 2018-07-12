@@ -3,6 +3,8 @@ using Saver.Repositories.Attributes;
 using Saver.Repositories.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -71,5 +73,26 @@ namespace Saver.Repositories.Implementations
             LoadedResources.Add(methodName, resources);
             return resources;
         }
+
+
+        #region Public Methods
+
+        /// <summary>
+        /// Converts the object provided to a collection of parameters
+        /// that can be used in queries as required
+        /// </summary>
+        /// <param name="parameterDetails">The parameter details object</param>
+        /// <returns>A collection of name and value for use in parameters</returns>
+        public Dictionary<string, object> ConvertToParameters(object parameterDetails)
+        {
+            IDictionary<string, object> expando = new ExpandoObject();
+            foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(parameterDetails.GetType()))
+            {
+                expando.Add(property.Name, property.GetValue(parameterDetails));
+            }
+            return expando.ToDictionary(k => k.Key, k => k.Value);
+        }
+
+        #endregion
     }
 }

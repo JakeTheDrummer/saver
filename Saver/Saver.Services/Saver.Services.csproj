@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementations\GoalService.cs" />
+    <Compile Include="Implementations\ServiceBase.cs" />
     <Compile Include="Interfaces\IGoalService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

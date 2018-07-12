@@ -30,6 +30,35 @@ namespace Saver.Repositories.Implementations.Goal
         }
 
         /// <summary>
+        /// Creates the goal on the system for the given user
+        /// and returns the persisted value
+        /// </summary>
+        /// <param name="userID">The ID of the user for whom this has been created</param>
+        /// <param name="goal">The goal containing the information to persist</param>
+        /// <returns>The goal that was persisted</returns>
+        [SqlResource(@"Goal\CreateGoalForUser")]
+        public Model.Goal CreateGoalForUser(int userID, Model.Goal goal)
+        {
+            string sql = base.LoadSqlResources().Values.First();
+            Dictionary<string, object> parameters = ConvertToParameters
+            (
+                new
+                {
+                    UserId = userID,
+                    goal.Name,
+                    goal.Description,
+                    goal.Target,
+                    StatusId = GoalStatus.Open,
+                    goal.IsDefault
+                }
+            );
+
+            //Execute and return the goal
+            Model.Goal savedGoal = typedDataAccess.ExecuteQuery<Model.Goal>(sql, parameters).First();
+            return savedGoal;
+        }
+
+        /// <summary>
         /// Returns the goal on the system with the
         /// given goal ID
         /// </summary>
@@ -40,10 +69,7 @@ namespace Saver.Repositories.Implementations.Goal
         {
             //Collect the SQL and call
             string sql = base.LoadSqlResources().Values.First();
-            Dictionary<string, object> parameters = new Dictionary<string, object>()
-            {
-                { "Id", goalID }
-            };
+            Dictionary<string, object> parameters = ConvertToParameters(new { Id = goalID });
 
             //Load the goal
             Model.Goal goal = typedDataAccess.ExecuteQuery<Model.Goal>(sql, parameters).First();
@@ -58,7 +84,7 @@ namespace Saver.Repositories.Implementations.Goal
         public IEnumerable<Model.Goal> GetGoals()
         {
             string sql = LoadSqlResources().Values.First();
-            return typedDataAccess.ExecuteQuery<Model.Goal>(sql, null);
+            return typedDataAccess.ExecuteQuery<Model.Goal>(sql);
         }
 
         /// <summary>
@@ -66,9 +92,14 @@ namespace Saver.Repositories.Implementations.Goal
         /// </summary>
         /// <param name="userID">The ID of the User</param>
         /// <returns>The goals of the user</returns>
+        [SqlResource(@"Goal\GetGoalsForUser")]
         public IEnumerable<Model.Goal> GetGoalsForUser(int userID)
         {
-            throw new NotImplementedException();
+            string sql = LoadSqlResources().Values.First();
+            Dictionary<string, object> parameters = ConvertToParameters(new { UserId = userID });
+
+            //Load the goal
+            return typedDataAccess.ExecuteQuery<Model.Goal>(sql, parameters);
         }
     }
 }

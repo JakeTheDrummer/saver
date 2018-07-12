@@ -22,5 +22,15 @@ namespace Saver.DataAccess.Interfaces
         /// <param name="parameters">The parameters that we wish to use in the query</param>
         /// <returns>An enumerable of type T from the data storage</returns>
         IEnumerable<T> ExecuteQuery<T>(string sql, Dictionary<string, object> parameters);
+
+        /// <summary>
+        /// Returns the typed objects of type T from the database
+        /// using the SQL statement given
+        /// </summary>
+        /// <typeparam name="T">The type to return</typeparam>
+        /// <param name="sql">The SQL returning the type</param>
+        /// <returns>An enumerable of type T from the data storage</returns>
+
+        IEnumerable<T> ExecuteQuery<T>(string sql);
     }
 }

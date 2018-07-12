@@ -40,8 +40,7 @@ namespace Saver.Server.Controllers
         {
             return goalService.GetGoals();
         }
-
-
+        
         // GET api/users/{userID}/goals
         /// <summary>
         /// Returns the collection of goals for the user
@@ -49,14 +48,11 @@ namespace Saver.Server.Controllers
         /// </summary>
         /// <param name="userId">The ID of the user for which we are returning goals</param>
         /// <returns>A collection of goals for the user</returns>
+        [HttpGet]
+        [Route("users/{userId:int:min(1)}/goals")]
         public IEnumerable<Goal> Get(int userId)
         {
-            //Return the goals
-            return new Goal[] 
-            {
-                new Goal(1, "Test Goal A", "A", 150, GoalStatus.Open, false),
-                new Goal(2, "Test Goal B", "B", 500, GoalStatus.Complete, false),
-            };
+            return goalService.GetGoalsForUser(userId);
         }
 
         // GET api/users/{userID}/goals/{id}
@@ -85,7 +81,7 @@ namespace Saver.Server.Controllers
         [HttpPost]
         public Goal Post(int userId, [FromBody]Goal goal)
         {
-            throw new NotImplementedException();
+            return goalService.CreateGoal(userId, goal);
         }
 
         // PUT api/users/1/goals/5

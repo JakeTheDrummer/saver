@@ -19,6 +19,13 @@ namespace Saver.Services.Interfaces
         IEnumerable<Goal> GetGoals();
 
         /// <summary>
+        /// Returns all goals on the system for the given user
+        /// </summary>
+        /// <param name="userID">The ID of the user</param>
+        /// <returns>The goals on the system the user</returns>
+        IEnumerable<Goal> GetGoalsForUser(int userID);
+
+        /// <summary>
         /// Returns the Goal with the given ID from the system
         /// </summary>
         /// <param name="id">The ID of the Goal</param>
@@ -26,13 +33,21 @@ namespace Saver.Services.Interfaces
         Goal GetGoal(int id);
 
         /// <summary>
-        /// Attempts to save the goal on the system
+        /// Attempts to create the goal on the system
         /// and returns the value stored in the database
         /// </summary>
-        /// <param name="id">The ID (if existing)</param>
+        /// <param name="userId">The ID of the User</param>
         /// <param name="goal">The goal to be persisted</param>
         /// <returns>The goal that was saved on the system</returns>
-        Goal SaveGoal(int? id, Goal goal);
+        Goal CreateGoal(int? userId, Goal goal);
+
+        /// <summary>
+        /// Attempts to update the goal on the system
+        /// and returns the value stored in the database
+        /// </summary>
+        /// <param name="goal">The goal to be persisted</param>
+        /// <returns>The goal that was saved on the system</returns>
+        Goal UpdateGoal(Goal goal);
 
         /// <summary>
         /// Deletes the goal on the system with the given

@@ -89,6 +89,18 @@ namespace Saver.DataAccess.Objects.MySQL
 
         /// <summary>
         /// Returns the typed objects of type T from the database
+        /// using the SQL statement given
+        /// </summary>
+        /// <typeparam name="T">The type to return</typeparam>
+        /// <param name="sql">The SQL returning the type</param>
+        /// <returns>An enumerable of type T from the data storage</returns>
+        public IEnumerable<T> ExecuteQuery<T>(string sql)
+        {
+            return ExecuteQuery<T>(sql);
+        }
+
+        /// <summary>
+        /// Returns the typed objects of type T from the database
         /// using the SQL statement and parameters given
         /// </summary>
         /// <typeparam name="T">The type to return</typeparam>

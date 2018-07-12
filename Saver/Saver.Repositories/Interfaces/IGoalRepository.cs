@@ -32,5 +32,15 @@ namespace Saver.Repositories.Interfaces
         /// <param name="userID">The ID of the User</param>
         /// <returns>The goals of the user</returns>
         IEnumerable<Goal> GetGoalsForUser(int userID);
+
+        /// <summary>
+        /// Creates the Goal on the system for the user
+        /// with the given ID and using the information
+        /// in the goal. The ID of the goal will be ignored
+        /// </summary>
+        /// <param name="value">The ID of the user to be assigned</param>
+        /// <param name="goal">The goal that is being created</param>
+        /// <returns>The goal that was created and persisted</returns>
+        Goal CreateGoalForUser(int value, Goal goal);
     }
 }

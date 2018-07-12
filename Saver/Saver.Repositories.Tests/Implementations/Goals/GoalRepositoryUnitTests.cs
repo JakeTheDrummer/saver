@@ -90,5 +90,28 @@ namespace Saver.Repositories.Tests.Implementations.Goals
             loadedResources.Should().NotBeNull();
             loadedResources.Count.Should().Be(1);
         }
+        
+        /// <summary>
+        /// Given an anonymous method, this should convert from this type to
+        /// a dictionary of string and value.
+        /// </summary>
+        [TestMethod]
+        public void ShouldConvertFromAnonymousTypeToDictionaryOfParameters()
+        {
+            //Arrange
+            DateTime expectedDate = DateTime.Now;
+            var anonymous = new { Value1 = "Testing", Value2 = 1, Value3 = expectedDate, Value4 = 'c' };
+            string[] expectedKeys = new string[] { "Value1", "Value2", "Value3", "Value4" };
+            object[] expectedValues = { "Testing", 1, expectedDate, 'c' };
+            GoalRepository repository = new GoalRepository(mockDataAccess.Object, mockSqlStringService.Object);
+
+            //Act
+            Dictionary<string, object> parameterDictionary = repository.ConvertToParameters(anonymous);
+
+            //Assert
+            parameterDictionary.Count.Should().Be(4);
+            parameterDictionary.Keys.Should().ContainInOrder(expectedKeys);
+            parameterDictionary.Values.Should().ContainInOrder(expectedValues);
+        }
     }
 }
