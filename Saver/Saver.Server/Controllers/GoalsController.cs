@@ -90,13 +90,13 @@ namespace Saver.Server.Controllers
         /// </summary>
         /// <param name="userId">The ID of the user for the goal</param>
         /// <param name="id">The ID of the goal we wish to update</param>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="goal">The goal that we are updating</param>
+        /// <returns>The goal that was updated on the system</returns>
         [HttpPut]
         [Route("{id:int:min(1)}")]
-        public Goal Put(int userId, int id, [FromBody]Goal value)
+        public Goal Put(int userId, int id, [FromBody]Goal goal)
         {
-            throw new NotImplementedException();
+            return goalService.UpdateGoal(userId, id, goal);
         }
 
         // DELETE api/users/1/goals/5
@@ -111,7 +111,7 @@ namespace Saver.Server.Controllers
         [Route("{id:int:min(1)}")]
         public void Delete(int userId, int id)
         {
-            throw new NotImplementedException();
+            goalService.DeleteGoal(userId, id);
         }
     }
 }

@@ -141,5 +141,155 @@ namespace Saver.Services.Tests
             savedGoal.Status.Should().Be(defaultCreateStatus);
             savedGoal.IsDefault.Should().Be(knownGoal.IsDefault);
         }
+
+        /// <summary>
+        /// Should return a null reference when the goal with the ID does not exist
+        /// </summary>
+        [TestMethod]
+        public void ShouldThrowANullReferenceExceptionWhenGoalWithIDDoesNotExist()
+        {
+            //Arrange
+            int expectedGoalID = 1;
+            mockGoalRepository.Setup(gr => gr.GetGoal(It.Is<int>(val => val == expectedGoalID))).Returns(null as Goal);
+            IGoalService service = new GoalService(mockGoalRepository.Object);
+
+            //Act
+            Action failAction = () => service.GetGoal(expectedGoalID);
+
+            //Assert
+            failAction.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+
+
+        /// <summary>
+        /// Tests that we can update an existing goal for a user
+        /// </summary>
+        [TestMethod]
+        public void ShouldUpdateGoalForUserBasedOnGoalIdAndUserId()
+        {
+            //Arrange
+            int expectedId = 1;
+            int expectedUserId = 1;
+            Goal targetGoal = new Goal(expectedId, "Testing Goal", "Testing Goal", 50, GoalStatus.Open, false);
+            Goal expectedGoal = new Goal(expectedId, "Testing Goal", "Testing Goal", 100, GoalStatus.Open, false);
+
+            //Pretend the goal exists
+            mockGoalRepository.Setup(gr => gr.GetGoalForUser(It.Is<int>(val => val == expectedId), It.Is<int>(val => val == expectedUserId))).Returns(targetGoal);
+
+            //Pretend the update goals smoothly
+            mockGoalRepository.Setup(gr => gr.UpdateGoal(It.Is<int>(val => val == expectedId), It.Is<Goal>(val => val.Equals(expectedGoal)))).Returns(expectedGoal);
+
+            IGoalService goalService = new GoalService(mockGoalRepository.Object);
+
+            //Act
+            Goal savedGoal = goalService.UpdateGoal(expectedUserId, expectedId, expectedGoal);
+            
+            //Assert
+            savedGoal.Should().NotBeNull();
+            savedGoal.Id.Should().Be(expectedId);
+            savedGoal.Name.Should().Be(expectedGoal.Name);
+            savedGoal.Description.Should().Be(expectedGoal.Description);
+            savedGoal.Target.Should().Be(expectedGoal.Target);
+            savedGoal.Status.Should().Be(expectedGoal.Status);
+            savedGoal.IsDefault.Should().Be(expectedGoal.IsDefault);
+        }
+
+        /// <summary>
+        /// Tests that we cannot update an non-existant goal for a user
+        /// </summary>
+        [TestMethod]
+        public void ShouldThrowANullReferenceExceptionWhenGoalDoesNotExistWithUserIdWhenUpdating()
+        {
+            //Arrange
+            int expectedId = 1;
+            int expectedUserId = 1;
+            Goal expectedGoal = new Goal(expectedId, "Testing Goal", "Testing Goal", 100, GoalStatus.Open, false);
+
+            //Pretend the goal does not exist
+            mockGoalRepository.Setup(gr => gr.GetGoalForUser(It.Is<int>(val => val == expectedId), It.Is<int>(val => val == expectedUserId))).Returns(null as Goal);
+            IGoalService goalService = new GoalService(mockGoalRepository.Object);
+
+            //Act
+            Action failAction = () => goalService.UpdateGoal(expectedUserId, expectedId, expectedGoal);
+
+            //Assert
+            failAction.Should().Throw<NullReferenceException>();
+        }
+
+
+        /// <summary>
+        /// Tests that we can update an existing goal for a user
+        /// </summary>
+        [TestMethod]
+        public void ShouldDeleteGoalForUserBasedOnGoalIdAndUserId()
+        {
+            //Arrange
+            int expectedId = 1;
+            int expectedUserId = 1;
+            Goal expectedGoal = new Goal(expectedId, "Testing Goal", "Testing Goal", 100, GoalStatus.Open, false);
+
+            //Pretend the goal exists
+            mockGoalRepository.Setup(gr => gr.GetGoalForUser(It.Is<int>(val => val == expectedId), It.Is<int>(val => val == expectedUserId))).Returns(expectedGoal);
+
+            //Pretend the delete goals operation goes smoothly
+            mockGoalRepository.Setup(gr => gr.Delete(It.Is<int>(val => val == expectedId))).Returns(expectedGoal);
+
+            IGoalService goalService = new GoalService(mockGoalRepository.Object);
+
+            //Act
+            bool goalRemoved = goalService.DeleteGoal(expectedUserId, expectedId);
+
+            //Assert
+            goalRemoved.Should().Be(true);
+        }
+
+        /// <summary>
+        /// Tests that we cannot delete an non-existant goal for a user
+        /// </summary>
+        [TestMethod]
+        public void ShouldThrowANullReferenceExceptionWhenGoalDoesNotExistWithUserIdWhenDeleting()
+        {
+            //Arrange
+            int expectedId = 1;
+            int expectedUserId = 1;
+            Goal expectedGoal = new Goal(expectedId, "Testing Goal", "Testing Goal", 100, GoalStatus.Open, false);
+
+            //Pretend the goal does not exist
+            mockGoalRepository.Setup(gr => gr.GetGoalForUser(It.Is<int>(val => val == expectedId), It.Is<int>(val => val == expectedUserId))).Returns(null as Goal);
+            IGoalService goalService = new GoalService(mockGoalRepository.Object);
+
+            //Act
+            Action failAction = () => goalService.DeleteGoal(expectedUserId, expectedId);
+
+            //Assert
+            failAction.Should().Throw<NullReferenceException>();
+        }
+
+
+        /// <summary>
+        /// Tests that we cannot delete an non-existant goal for a user
+        /// when performing the delete operation
+        /// </summary>
+        [TestMethod]
+        public void ShouldThrowANullReferenceExceptionDuringDeleteOperation()
+        {
+            //Arrange
+            int expectedId = 1;
+            int expectedUserId = 1;
+            Goal expectedGoal = new Goal(expectedId, "Testing Goal", "Testing Goal", 100, GoalStatus.Open, false);
+
+            //Pretend the goal does not exist but the delete does not
+            mockGoalRepository.Setup(gr => gr.GetGoalForUser(It.Is<int>(val => val == expectedId), It.Is<int>(val => val == expectedUserId))).Returns(expectedGoal);
+            mockGoalRepository.Setup(gr => gr.Delete(It.Is<int>(val => val == expectedId))).Returns(null as Goal);
+
+            IGoalService goalService = new GoalService(mockGoalRepository.Object);
+
+            //Act
+            Action failAction = () => goalService.DeleteGoal(expectedUserId, expectedId);
+
+            //Assert
+            failAction.Should().Throw<NullReferenceException>();
+        }
     }
 }

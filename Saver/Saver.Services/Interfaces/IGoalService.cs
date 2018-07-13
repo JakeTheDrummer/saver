@@ -45,17 +45,20 @@ namespace Saver.Services.Interfaces
         /// Attempts to update the goal on the system
         /// and returns the value stored in the database
         /// </summary>
+        /// <param name="userId">The ID of the user that owns the goal</param>
+        /// <param name="goalId">The ID of the goal we should update</param>
         /// <param name="goal">The goal to be persisted</param>
         /// <returns>The goal that was saved on the system</returns>
-        Goal UpdateGoal(Goal goal);
+        Goal UpdateGoal(int userId, int goalId, Goal goal);
 
         /// <summary>
         /// Deletes the goal on the system with the given
-        /// ID. This will delete milestones associated with
+        /// ID and User Id Owner. This will delete milestones associated with
         /// the goal also.
         /// </summary>
+        /// <param name="userId">The ID of the user owning the goal</param>
         /// <param name="id">The ID of the Goal to delete</param>
         /// <returns>Whether we have deleted the goal</returns>
-        bool DeleteGoal(int id);
+        bool DeleteGoal(int userId, int id);
     }
 }

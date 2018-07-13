@@ -59,6 +59,22 @@ namespace Saver.Repositories.Implementations.Goal
         }
 
         /// <summary>
+        /// Attempts to delete the Goal on the system with the given ID
+        /// </summary>
+        /// <param name="id">The ID of the goal to delete on the system</param>
+        /// <returns>The record we have deleted</returns>
+        [SqlResource(@"Goal\DeleteGoalWithSelect")]
+        public Model.Goal Delete(int id)
+        {
+            //Collect the SQL and call
+            string sql = base.LoadSqlResources().Values.First();
+            Dictionary<string, object> parameters = ConvertToParameters(new { Id = id });
+
+            Model.Goal removedGoal = typedDataAccess.ExecuteQuery<Model.Goal>(sql, parameters).First();
+            return removedGoal;
+        }
+
+        /// <summary>
         /// Returns the goal on the system with the
         /// given goal ID
         /// </summary>
@@ -68,8 +84,26 @@ namespace Saver.Repositories.Implementations.Goal
         public Model.Goal GetGoal(int goalID)
         {
             //Collect the SQL and call
-            string sql = base.LoadSqlResources().Values.First();
+            string sql = base.LoadSqlResources().Values.FirstOrDefault();
             Dictionary<string, object> parameters = ConvertToParameters(new { Id = goalID });
+
+            //Load the goal
+            Model.Goal goal = typedDataAccess.ExecuteQuery<Model.Goal>(sql, parameters).FirstOrDefault();
+            return goal;
+        }
+
+        /// <summary>
+        /// Returns the goal for the user with the given goal ID
+        /// </summary>
+        /// <param name="goaID">The ID of the Goal</param>
+        /// <param name="userId">The ID of the User</param>
+        /// <returns>The goal of the user</returns
+        [SqlResource(@"Goal\GetGoalByIdAndUserId")]
+        public Model.Goal GetGoalForUser(int goaID, int userId)
+        {
+            //Collect the SQL and call
+            string sql = base.LoadSqlResources().Values.First();
+            Dictionary<string, object> parameters = ConvertToParameters(new { Id = goaID, UserId = userId });
 
             //Load the goal
             Model.Goal goal = typedDataAccess.ExecuteQuery<Model.Goal>(sql, parameters).First();
@@ -100,6 +134,34 @@ namespace Saver.Repositories.Implementations.Goal
 
             //Load the goal
             return typedDataAccess.ExecuteQuery<Model.Goal>(sql, parameters);
+        }
+
+        /// <summary>
+        /// Updates the Goal on the system with the matching ID
+        /// using the details within the Goal
+        /// </summary>
+        /// <param name="goalId">The ID of the Goal to update</param>
+        /// <param name="goal">The goal containing the new information</param>
+        /// <returns>The goal that was saved on the system</returns>
+        [SqlResource(@"Goal\UpdateGoal")]
+        public Model.Goal UpdateGoal(int goalId, Model.Goal goal)
+        {
+            string sql = base.LoadSqlResources().Values.First();
+            Dictionary<string, object> parameters = ConvertToParameters
+            (
+                new
+                {
+                    Id = goalId,
+                    goal.Name,
+                    goal.Description,
+                    goal.Target,
+                    StatusId = GoalStatus.Open,
+                    goal.IsDefault
+                }
+            );
+
+            //Update and return
+            return typedDataAccess.ExecuteQuery<Model.Goal>(sql, parameters).First();
         }
     }
 }

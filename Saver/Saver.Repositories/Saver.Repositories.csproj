@@ -72,5 +72,14 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Sql\Goal\CreateGoalForUser.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sql\Goal\GetGoalByIdAndUserId.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sql\Goal\UpdateGoal.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sql\Goal\DeleteGoalWithSelect.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
