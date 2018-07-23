@@ -58,6 +58,8 @@ namespace Saver.Server.IntegrationTests.Controllers
         [TestMethod]
         public void Get_ShouldReturnAKnownUserGoalByUserIDAndGoalID()
         {
+            mockGoalService.Setup(gs => gs.GetGoal(It.Is<int>(val => val == GOALID))).Returns(goal);
+
             // Arrange
             GoalsController controller = new GoalsController(mockGoalService.Object);
 

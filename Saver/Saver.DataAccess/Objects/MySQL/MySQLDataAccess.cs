@@ -96,7 +96,7 @@ namespace Saver.DataAccess.Objects.MySQL
         /// <returns>An enumerable of type T from the data storage</returns>
         public IEnumerable<T> ExecuteQuery<T>(string sql)
         {
-            return ExecuteQuery<T>(sql);
+            return ExecuteQuery<T>(sql, null);
         }
 
         /// <summary>

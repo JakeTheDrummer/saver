@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GoalServiceUnitTests.cs" />
+    <Compile Include="MilestoneServiceUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

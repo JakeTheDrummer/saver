@@ -14,6 +14,14 @@ namespace Saver.Model
     public class Milestone
     {
         /// <summary>
+        /// To be used by Dapper ONLY
+        /// </summary>
+        public Milestone()
+            : this(-1, 0, null, null)
+        {
+        }
+
+        /// <summary>
         /// Creates a new Milestone
         /// </summary>
         /// <param name="id">The ID of the Milestone</param>

@@ -42,9 +42,11 @@
   <ItemGroup>
     <Compile Include="Attributes\SqlResourceAttribute.cs" />
     <Compile Include="Implementations\Goal\GoalRepository.cs" />
+    <Compile Include="Implementations\Milestone\MilestoneRepository.cs" />
     <Compile Include="Implementations\RepositoryBase.cs" />
     <Compile Include="Implementations\SqlRepositoryBase.cs" />
     <Compile Include="Interfaces\IGoalRepository.cs" />
+    <Compile Include="Interfaces\IMilestoneRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\EmbeddedResourceSqlStringService.cs" />
     <Compile Include="Services\Exceptions\ResourceNotFoundException.cs" />
@@ -80,6 +82,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Sql\Goal\DeleteGoalWithSelect.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sql\Milestone\GetAll.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
