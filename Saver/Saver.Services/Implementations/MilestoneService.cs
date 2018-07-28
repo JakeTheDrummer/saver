@@ -45,7 +45,7 @@ namespace Saver.Services.Implementations
         /// <returns>The collection of milestones for the goal</returns>
         public IEnumerable<Milestone> GetMilestonesForGoal(int goalId)
         {
-            throw new NotImplementedException();
+            return ExecuteThenOrderBy(() => milestoneRepository.GetForGoal(goalId), milestone => milestone.Id);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Saver.Services.Implementations
         /// <returns>The milestone with the given ID</returns>
         public Milestone GetMilestone(int id)
         {
-            throw new NotImplementedException();
+            return milestoneRepository.Get(id);
         }
 
         /// <summary>
@@ -66,7 +66,21 @@ namespace Saver.Services.Implementations
         /// <returns>The milestones that were created</returns>
         public IEnumerable<Milestone> GenerateMilestones(Goal goal)
         {
-            throw new NotImplementedException();
+            //If we have some we should stop
+            IEnumerable<Milestone> currentMilestones = milestoneRepository.GetForGoal(goal.Id);
+            if (currentMilestones.Any())
+                throw new Exception("This goal has milestones already - cannot automatically create additional milestones");
+
+            List<Milestone> milestones = new List<Milestone>(5);
+            double targetSteps = goal.Target / 5;
+            for (int i = 1; i <= 5; i++)
+            {
+                milestones.Add(new Milestone(targetSteps * i, $"{goal.Name} - {i}/5 completed!", null));
+            }
+
+            //Generate the milestones
+            milestones = ExecuteThenOrderBy(() => milestoneRepository.CreateMultipleForGoal(milestones, goal.Id), m => m.Id).ToList();
+            return milestones;
         }
 
         /// <summary>
@@ -77,7 +91,17 @@ namespace Saver.Services.Implementations
         /// <returns>The goal that was created</returns>
         public Milestone CreateMilestoneForGoal(Milestone milestone, Goal goal)
         {
-            throw new NotImplementedException();
+            //Check this is valid
+            if (milestone.Target > goal.Target)
+                throw new ArgumentException("The target for this milestone exceeds the target for the goal");
+            if (milestone.Target <= 0)
+                throw new ArgumentException("The target for this milestone cannot be zero or below");
+
+            IEnumerable<Milestone> currentMilestones = milestoneRepository.GetForGoal(goal.Id);
+            if (currentMilestones.Any(currentMilestone => currentMilestone.Target == milestone.Target))
+                throw new ArgumentException("This goal already has a milestone for the given target amount");
+
+            return milestoneRepository.CreateForGoal(milestone, goal.Id);
         }
 
         /// <summary>
@@ -89,7 +113,20 @@ namespace Saver.Services.Implementations
         /// <returns>The milestone that was saved on the system</returns>
         public Milestone UpdateMilestone(int id, Milestone milestone)
         {
-            throw new NotImplementedException();
+            //Run the appropriate validations
+            ValidateMilestoneExistsAndIsNotCompleted(id);
+            return milestoneRepository.Update(id, milestone);
+        }
+
+        private void ValidateMilestoneExistsAndIsNotCompleted(int id)
+        {
+            //Ensure we can update here
+            Milestone currentMilestone = milestoneRepository.Get(id);
+            if (currentMilestone == null)
+                throw new ArgumentException("A milestone with this ID does not exist on the system");
+
+            if (currentMilestone.DateMet.HasValue)
+                throw new Exception("This milestone has been completed and cannot be updated");
         }
 
         /// <summary>
@@ -100,7 +137,9 @@ namespace Saver.Services.Implementations
         /// <returns>The ID of the record to delete</returns>
         public Milestone DeleteMilestone(int id)
         {
-            throw new NotImplementedException();
+            //Run the appropriate validations
+            ValidateMilestoneExistsAndIsNotCompleted(id);
+            return milestoneRepository.Delete(id);
         }
     }
 }

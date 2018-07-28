@@ -98,7 +98,7 @@ namespace Saver.DataAccess.Objects.MySQL
         {
             return ExecuteQuery<T>(sql, null);
         }
-
+        
         /// <summary>
         /// Returns the typed objects of type T from the database
         /// using the SQL statement and parameters given
@@ -109,11 +109,24 @@ namespace Saver.DataAccess.Objects.MySQL
         /// <returns>An enumerable of type T from the data storage</returns>
         public IEnumerable<T> ExecuteQuery<T>(string sql, Dictionary<string, object> parameters)
         {
+            return ExecuteQueryWithGenericParameterType<T>(sql, parameters);
+        }
+
+        /// <summary>
+        /// Returns the typed objects of type T from the database
+        /// using the SQL statement and parameters given
+        /// </summary>
+        /// <typeparam name="T">The type to return</typeparam>
+        /// <param name="sql">The SQL returning the type</param>
+        /// <param name="parameters">The parameters that we wish to use in the query</param>
+        /// <returns>An enumerable of type T from the data storage</returns>
+        public IEnumerable<T> ExecuteQueryWithGenericParameterType<T>(string sql, dynamic queryParameterObjects)
+        {
             IEnumerable<T> results = ExecuteThenClose
             (
                 (connection =>
                 {
-                    CommandDefinition command = new CommandDefinition(sql, parameters);
+                    CommandDefinition command = new CommandDefinition(sql, queryParameterObjects);
 
                     //Collect the query through dapper
                     IEnumerable<T> queryResult = connection.Query<T>(command);

@@ -37,6 +37,19 @@ namespace Saver.Repositories.Implementations.Milestone
             string sql = LoadSqlResources().Values.First();
             return typedDataAccess.ExecuteQuery<Model.Milestone>(sql);
         }
+        
+        /// <summary>
+        /// Returns the Milestone with the matching ID
+        /// </summary>
+        /// <param name="id">The ID of the Milestone</param>
+        /// <returns>The milestone with the given ID</returns>
+        [SqlResource(@"Milestone\Get")]
+        public Model.Milestone Get(int id)
+        {
+            string sql = LoadSqlResources().Values.First();
+            Dictionary<string, object> parameters = ConvertToParameters(new { Id = id });
+            return typedDataAccess.ExecuteQuery<Model.Milestone>(sql, parameters).FirstOrDefault();
+        }
 
         /// <summary>
         /// Returns the milestones assigned to
@@ -44,18 +57,12 @@ namespace Saver.Repositories.Implementations.Milestone
         /// </summary>
         /// <param name="goalId">The ID of the Goal</param>
         /// <returns>The collection of milestones for the goal</returns>
+        [SqlResource(@"Milestone\GetForGoal")]
         public IEnumerable<Model.Milestone> GetForGoal(int goalId)
         {
-            throw new NotImplementedException();
-        }
-        /// <summary>
-        /// Returns the Milestone with the matching ID
-        /// </summary>
-        /// <param name="id">The ID of the Milestone</param>
-        /// <returns>The milestone with the given ID</returns>
-        public Model.Milestone Get(int id)
-        {
-            throw new NotImplementedException();
+            string sql = LoadSqlResources().Values.First();
+            Dictionary<string, object> parameters = ConvertToParameters(new { GoalId = goalId });
+            return typedDataAccess.ExecuteQuery<Model.Milestone>(sql, parameters);
         }
 
         /// <summary>
@@ -64,21 +71,37 @@ namespace Saver.Repositories.Implementations.Milestone
         /// <param name="milestone">The milestone to be created for the goal</param>
         /// <param name="goalId">The Goal ID for which we are creating the milestone</param>
         /// <returns>The goal that was created</returns>
+        [SqlResource(@"Milestone\CreateForGoal")]
         public Model.Milestone CreateForGoal(Model.Milestone milestone, int goalId)
         {
-            throw new NotImplementedException();
+            string sql = LoadSqlResources().Values.First();
+            Dictionary<string, object> parameters = ConvertToParameters
+            (
+                new
+                {
+                    milestone.Target,
+                    milestone.Description,
+                    milestone.DateMet,
+                    GoalId = goalId
+                }
+            );
+            return typedDataAccess.ExecuteQuery<Model.Milestone>(sql, parameters).FirstOrDefault();
         }
 
         /// <summary>
         /// Creates a number of milestones for the goal
         /// </summary>
-        /// <param name="milestone">The milestone(s) to be created</param>
+        /// <param name="milestones">The milestone(s) to be created</param>
         /// <param name="goalId">The ID for the goal</param>
-        /// <returns></returns>
-        public IEnumerable<Model.Milestone> CreateMultipleForGoal(IEnumerable<Model.Milestone> milestone, int goalId)
+        /// <returns>The milestones that were created</returns>
+        [SqlResource(@"Milestone\CreateMultipleForGoal")]
+        public IEnumerable<Model.Milestone> CreateMultipleForGoal(IEnumerable<Model.Milestone> milestones, int goalId)
         {
-            throw new NotImplementedException();
+            string sql = LoadSqlResources().Values.First();
+            var parameters = from milestone in milestones select new { milestone.Target, milestone.Description, milestone.DateMet, GoalId = goalId };
+            return typedDataAccess.ExecuteQueryWithGenericParameterType<Model.Milestone>(sql, parameters);
         }
+
         /// <summary>
         /// Updates the Milestone on the system with the given ID
         /// using the details of the milestone provided
@@ -86,9 +109,14 @@ namespace Saver.Repositories.Implementations.Milestone
         /// <param name="id">The ID of the milestone</param>
         /// <param name="milestone">The milestone containing new information</param>
         /// <returns>The milestone that was saved on the system</returns>
+        [SqlResource(@"Milestone\Update")]
         public Model.Milestone Update(int id, Model.Milestone milestone)
         {
-            throw new NotImplementedException();
+            string sql = LoadSqlResources().Values.First();
+            milestone.Id = id;
+
+            //Return directly from the update
+            return typedDataAccess.ExecuteQueryWithGenericParameterType<Model.Milestone>(sql, milestone).FirstOrDefault();
         }
 
         /// <summary>
@@ -97,9 +125,14 @@ namespace Saver.Repositories.Implementations.Milestone
         /// </summary>
         /// <param name="id">The ID of the Milestone to be deleted</param>
         /// <returns>The ID of the record to delete</returns>
+        [SqlResource(@"Milestone\Update")]
         public Model.Milestone Delete(int id)
         {
-            throw new NotImplementedException();
+            string sql = LoadSqlResources().Values.First();
+            var parameters = new { Id = id };
+
+            //Return directly from the delete
+            return typedDataAccess.ExecuteQueryWithGenericParameterType<Model.Milestone>(sql, parameters).FirstOrDefault();
         }
     }
 }

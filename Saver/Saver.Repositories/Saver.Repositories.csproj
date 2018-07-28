@@ -84,7 +84,25 @@
     <EmbeddedResource Include="Resources\Sql\Goal\DeleteGoalWithSelect.sql" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Sql\Milestone\Get.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sql\Milestone\GetForGoal.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sql\Milestone\CreateMultipleForGoal.sql" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Resources\Sql\Milestone\GetAll.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sql\Milestone\CreateForGoal.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sql\Milestone\Update.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sql\Milestone\DeleteWithSelect.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

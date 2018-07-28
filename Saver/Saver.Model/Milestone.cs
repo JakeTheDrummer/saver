@@ -24,6 +24,17 @@ namespace Saver.Model
         /// <summary>
         /// Creates a new Milestone
         /// </summary>
+        /// <param name="target">The target of the milestone in currency amount</param>
+        /// <param name="description">The description of the milestone</param>
+        /// <param name="dateMet">The date the milestone was met</param>
+        public Milestone(double target, string description, DateTime? dateMet)
+            : this(-1, target, description, dateMet)
+        {
+        }
+
+        /// <summary>
+        /// Creates a new Milestone
+        /// </summary>
         /// <param name="id">The ID of the Milestone</param>
         /// <param name="target">The target of the milestone in currency amount</param>
         /// <param name="description">The description of the milestone</param>
