@@ -207,6 +207,15 @@ namespace Saver.Repositories.Implementations.Milestone.Implementations.Milestone
 
             mockDataAccess.Setup
             (
+                da => da.ExecuteWithGenericParameters
+                (
+                    It.Is<string>(val => val.Equals(expectedSqlStatement)),
+                    It.IsAny<object>()
+                )
+            ).Returns(createdMilestones.Count);
+
+            mockDataAccess.Setup
+            (
                 da => da.ExecuteQueryWithGenericParameterType<Model.Milestone>
                 (
                     It.Is<string>(val => val.Equals(expectedSqlStatement)),

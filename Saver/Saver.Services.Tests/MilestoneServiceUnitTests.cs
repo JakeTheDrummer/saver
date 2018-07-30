@@ -365,9 +365,10 @@ namespace Saver.Services.Tests
         public void ShouldDeleteMilestoneFromSystemByKnownId()
         {
             int expectedMilestoneId = 10;
-            Milestone expectedMilestone = new Milestone(expectedMilestoneId, 100d, "Testing", DateTime.Now);
+            Milestone expectedMilestone = new Milestone(expectedMilestoneId, 100d, "Testing", null);
 
             //Setup the mocks
+            mockRepository.Setup(r => r.Get(It.Is<int>(val => val == expectedMilestoneId))).Returns(expectedMilestone);
             mockRepository.Setup(r => r.Delete(It.Is<int>(val => val == expectedMilestoneId))).Returns(expectedMilestone);
             IMilestoneService service = new MilestoneService(mockRepository.Object);
 
@@ -378,6 +379,26 @@ namespace Saver.Services.Tests
             removedMilestone.Should().NotBeNull();
             removedMilestone.Id.Should().Be(expectedMilestoneId);
             removedMilestone.Should().BeEquivalentTo(expectedMilestone);
+        }
+
+        /// <summary>
+        /// Tests that we are not able to delete the milestone from a system that has been completed
+        /// </summary>
+        [TestMethod]
+        public void ShouldNotDeleteMilestoneFromSystemIfItHasBeenCompleted()
+        {
+            int expectedMilestoneId = 10;
+            Milestone expectedMilestone = new Milestone(expectedMilestoneId, 100d, "Testing", DateTime.Now);
+
+            //Setup the mocks
+            mockRepository.Setup(r => r.Get(It.Is<int>(val => val == expectedMilestoneId))).Returns(expectedMilestone);
+            IMilestoneService service = new MilestoneService(mockRepository.Object);
+
+            //Act
+            Action failAction = () => service.DeleteMilestone(expectedMilestoneId);
+
+            //Assert
+            failAction.Should().Throw<Exception>();
         }
     }
 }
