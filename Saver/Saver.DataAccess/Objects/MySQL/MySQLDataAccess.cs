@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Dapper.SqlMapper;
 
 namespace Saver.DataAccess.Objects.MySQL
 {
@@ -85,8 +86,7 @@ namespace Saver.DataAccess.Objects.MySQL
 
             return resultTable;
         }
-
-
+        
         /// <summary>
         /// Returns the typed objects of type T from the database
         /// using the SQL statement given
@@ -175,6 +175,42 @@ namespace Saver.DataAccess.Objects.MySQL
         private void OnDisconnectionErrored(Exception exception)
         {
             throw new Exception("Disconnection from the database was not possible. See inner exception for information.", exception);
+        }
+
+        /// <summary>
+        /// Executes the SQL statement and returns the number of rows
+        /// that were affected by the query
+        /// </summary>
+        /// <typeparam name="TParameterType">The parameter type of the parameters</typeparam>
+        /// <param name="sql">The SQL statement to be processed</param>
+        /// <param name="parameters">Any parameters for this request</param>
+        /// <returns>The number of rows affected</returns>
+        public int Execute<TParameterType>(string sql, IEnumerable<TParameterType> parameters)
+        {
+            return ExecuteWithGenericParameters(sql, parameters);
+        }
+
+        /// <summary>
+        /// Executes the query with the generic parameters provided
+        /// </summary>
+        /// <param name="sql">The SQL containing the query to run</param>
+        /// <param name="parameters">The parameters to drive the query</param>
+        /// <returns>The count of the affected rows</returns>
+        public int ExecuteWithGenericParameters(string sql, dynamic parameters)
+        {
+            int result = ExecuteThenClose
+            (
+                (connection) =>
+                {
+                    CommandDefinition command = new CommandDefinition(sql, parameters);
+
+                    //Collect the query through dapper
+                    int affectedRows = connection.Execute(command);
+                    return affectedRows;
+                },
+                OnConnectionErrored, OnDisconnectionErrored
+            );
+            return result;
         }
     }
 }

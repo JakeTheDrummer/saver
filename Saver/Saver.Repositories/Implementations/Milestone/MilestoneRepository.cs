@@ -85,6 +85,7 @@ namespace Saver.Repositories.Implementations.Milestone
                     GoalId = goalId
                 }
             );
+
             return typedDataAccess.ExecuteQuery<Model.Milestone>(sql, parameters).FirstOrDefault();
         }
 
@@ -95,11 +96,23 @@ namespace Saver.Repositories.Implementations.Milestone
         /// <param name="goalId">The ID for the goal</param>
         /// <returns>The milestones that were created</returns>
         [SqlResource(@"Milestone\CreateMultipleForGoal")]
+        [SqlResource(@"Milestone\GetForGoal")]
         public IEnumerable<Model.Milestone> CreateMultipleForGoal(IEnumerable<Model.Milestone> milestones, int goalId)
         {
-            string sql = LoadSqlResources().Values.First();
-            var parameters = from milestone in milestones select new { milestone.Target, milestone.Description, milestone.DateMet, GoalId = goalId };
-            return typedDataAccess.ExecuteQueryWithGenericParameterType<Model.Milestone>(sql, parameters);
+            Dictionary<string, string> statements = LoadSqlResources();
+
+            string insertSQL = statements[@"Milestone\CreateMultipleForGoal"];
+            var insertParameters = from milestone in milestones select new { milestone.Target, milestone.Description, milestone.DateMet, GoalId = goalId };
+            
+            //Ensure we have inserted all required
+            int affected = typedDataAccess.ExecuteWithGenericParameters(insertSQL, insertParameters);
+            if (affected != milestones.Count())
+                throw new Exception("Could not create all required milestones on the system for goal");
+
+            //Return all the milestones
+            var selectParameters = new { GoalId = goalId };
+            string selectSQL = statements[@"Milestone\GetForGoal"];
+            return typedDataAccess.ExecuteQueryWithGenericParameterType<Model.Milestone>(selectSQL, selectParameters);
         }
 
         /// <summary>
@@ -125,7 +138,7 @@ namespace Saver.Repositories.Implementations.Milestone
         /// </summary>
         /// <param name="id">The ID of the Milestone to be deleted</param>
         /// <returns>The ID of the record to delete</returns>
-        [SqlResource(@"Milestone\Update")]
+        [SqlResource(@"Milestone\DeleteWithSelect")]
         public Model.Milestone Delete(int id)
         {
             string sql = LoadSqlResources().Values.First();

@@ -51,6 +51,7 @@ namespace Saver.Server.Controllers
         /// <returns>All milestone from the system</returns>
         [HttpGet]
         [Route("milestones/{id:int:min(1)}", Name = "GetMilestone")]
+        [Route("users/{userId:int:min(1)}/goals/{goalId:int:min(1)}/milestones/{id:int:min(1)}", Name = "GetMilestoneForGoalAndUser")]
         public Milestone Get(int id)
         {
             return milestoneService.GetMilestone(id);

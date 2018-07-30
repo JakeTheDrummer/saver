@@ -10,6 +10,7 @@ namespace Saver.Repositories.Attributes
     /// Represents meta data that allows an SQL resource
     /// name to be specified for a method or class
     /// </summary>
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class SqlResourceAttribute : Attribute
     {
         /// <summary>

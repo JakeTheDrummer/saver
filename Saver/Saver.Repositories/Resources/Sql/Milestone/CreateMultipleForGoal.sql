@@ -1,6 +1,4 @@
-﻿SET @previousMaximum = (SELECT MAX(Id) FROM saver.milestone WHERE goalid = @GoalId);
-
-INSERT INTO `saver`.`milestone`
+﻿INSERT INTO `saver`.`milestone`
 (
 	`target`,
 	`description`,
@@ -14,14 +12,3 @@ VALUES
 	@GoalId,
 	@DateMet
 );
-
-SELECT 
-	id,
-    target,
-    description,
-    dateMet
-FROM
-	saver.milestone
-WHERE
-	Id > @previousMaximum
-	AND Id <= LAST_INSERT_ID();
