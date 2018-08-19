@@ -45,8 +45,10 @@
     <Compile Include="Implementations\Milestone\MilestoneRepository.cs" />
     <Compile Include="Implementations\RepositoryBase.cs" />
     <Compile Include="Implementations\SqlRepositoryBase.cs" />
+    <Compile Include="Implementations\Transaction\TransactionRepository.cs" />
     <Compile Include="Interfaces\IGoalRepository.cs" />
     <Compile Include="Interfaces\IMilestoneRepository.cs" />
+    <Compile Include="Interfaces\ITransactionRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\EmbeddedResourceSqlStringService.cs" />
     <Compile Include="Services\Exceptions\ResourceNotFoundException.cs" />
@@ -103,6 +105,18 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Sql\Milestone\DeleteWithSelect.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sql\Transaction\Create.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sql\Transaction\GetTransactionsForGoal.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sql\Transaction\GetById.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sql\Transaction\GetTransactionsForUser.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

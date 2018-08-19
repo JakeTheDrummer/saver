@@ -20,6 +20,18 @@ namespace Saver.Model
         /// <param name="amount">The value of the transaction</param>
         /// <param name="sourceGoalId">The source (if any) of the transaction</param>
         /// <param name="timestamp">The timestamp of the transaction</param>
+        public Transaction(double amount, int? sourceGoalId, DateTime timestamp)
+            : this(-1, amount, sourceGoalId, timestamp)
+        {
+        }
+
+        /// <summary>
+        /// Creates a new Transaction
+        /// </summary>
+        /// <param name="id">The ID of the transaction</param>
+        /// <param name="amount">The value of the transaction</param>
+        /// <param name="sourceGoalId">The source (if any) of the transaction</param>
+        /// <param name="timestamp">The timestamp of the transaction</param>
         public Transaction(int id, double amount, int? sourceGoalId, DateTime timestamp)
         {
             Id = id;

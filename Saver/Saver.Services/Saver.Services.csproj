@@ -43,8 +43,10 @@
     <Compile Include="Implementations\GoalService.cs" />
     <Compile Include="Implementations\MilestoneService.cs" />
     <Compile Include="Implementations\ServiceBase.cs" />
+    <Compile Include="Implementations\TransactionService.cs" />
     <Compile Include="Interfaces\IGoalService.cs" />
     <Compile Include="Interfaces\IMilestoneService.cs" />
+    <Compile Include="Interfaces\ITransactionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

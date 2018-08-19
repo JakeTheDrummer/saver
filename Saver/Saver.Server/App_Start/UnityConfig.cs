@@ -4,6 +4,7 @@ using Saver.DataAccess.Factories.Interfaces;
 using Saver.DataAccess.Interfaces;
 using Saver.Repositories.Implementations.Goal;
 using Saver.Repositories.Implementations.Milestone;
+using Saver.Repositories.Implementations.Transaction;
 using Saver.Repositories.Interfaces;
 using Saver.Repositories.Services;
 using Saver.Repositories.Services.Interfaces;
@@ -55,6 +56,7 @@ namespace Saver.Server
             //Ensure we have the services ready
             container.RegisterType<IGoalService, GoalService>(new InjectionConstructor(container.Resolve<IGoalRepository>()));
             container.RegisterType<IMilestoneService, MilestoneService>(new InjectionConstructor(container.Resolve<IMilestoneRepository>()));
+            container.RegisterType<ITransactionService, TransactionService>(new InjectionConstructor(container.Resolve<ITransactionRepository>(), container.Resolve<IGoalRepository>(), container.Resolve<IMilestoneRepository>()));
         }
 
         /// <summary>
@@ -69,6 +71,7 @@ namespace Saver.Server
 
             container.RegisterType<IGoalRepository, GoalRepository>(new InjectionConstructor(dataAccess, sqlStringService));
             container.RegisterType<IMilestoneRepository, MilestoneRepository>(new InjectionConstructor(dataAccess, sqlStringService));
+            container.RegisterType<ITransactionRepository, TransactionRepository>(new InjectionConstructor(dataAccess, sqlStringService));
         }
     }
 }

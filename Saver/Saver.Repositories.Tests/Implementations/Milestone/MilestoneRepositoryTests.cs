@@ -5,6 +5,7 @@ using Saver.DataAccess.Interfaces;
 using Saver.Repositories.Implementations.Milestone;
 using Saver.Repositories.Interfaces;
 using Saver.Repositories.Services.Interfaces;
+using Saver.Repositories.Tests;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,20 +20,8 @@ namespace Saver.Repositories.Implementations.Milestone.Implementations.Milestone
     /// via the Milestone Repository interface
     /// </summary>
     [TestClass]
-    public class MilestoneRepositoryTests
+    public class MilestoneRepositoryTests : SqlRepositoryTestBase
     {
-        private readonly Mock<ITypedDataAccess> mockDataAccess;
-        private readonly Mock<ISqlStringService> mockSqlStringService;
-
-        /// <summary>
-        /// Creates new Milestone Repository Unit Tests
-        /// </summary>
-        public MilestoneRepositoryTests()
-        {
-            mockDataAccess = new Mock<ITypedDataAccess>();
-            mockSqlStringService = new Mock<ISqlStringService>();
-        }
-
         /// <summary>
         /// Tests that we can return all known milestones
         /// from the database

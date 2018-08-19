@@ -16,20 +16,8 @@ namespace Saver.Repositories.Tests.Implementations.Goals
     /// from the data layer appropriately
     /// </summary>
     [TestClass]
-    public class GoalRepositoryUnitTests
+    public class GoalRepositoryUnitTests : SqlRepositoryTestBase
     {
-        private readonly Mock<ITypedDataAccess> mockDataAccess;
-        private readonly Mock<ISqlStringService> mockSqlStringService;
-
-        /// <summary>
-        /// Creates new Goal Repository Unit Tests
-        /// </summary>
-        public GoalRepositoryUnitTests()
-        {
-            mockDataAccess = new Mock<ITypedDataAccess>();
-            mockSqlStringService = new Mock<ISqlStringService>();
-        }
-
         /// <summary>
         /// Ensures that we are only able to create a repository if
         /// we have been given a data access object
