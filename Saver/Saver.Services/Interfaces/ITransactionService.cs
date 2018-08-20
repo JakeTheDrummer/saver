@@ -55,7 +55,7 @@ namespace Saver.Services.Interfaces
         /// <param name="amount">The amount to be withdrawn</param>
         /// <param name="goalId">The ID of the goal to withdraw from</param>
         /// <returns>The resulting transaction</returns>
-        Transaction Withdraw(int userId, int amount, int goalId);
+        Transaction Withdraw(int userId, double amount, int goalId);
 
         /// <summary>
         /// Deposits the amount from into user's goal.
@@ -65,6 +65,6 @@ namespace Saver.Services.Interfaces
         /// <param name="amount">The amount to be deposited</param>
         /// <param name="goalId">The ID of the goal to which we will add</param>
         /// <returns>The resulting transaction</returns>
-        Transaction Deposit(int userId, int amount, int goalId);
+        Transaction Deposit(int userId, double amount, int goalId);
     }
 }

@@ -69,11 +69,13 @@ namespace Saver.Services.Implementations
 
             ValidateTransactionGoals(userId, out IEnumerable<Goal> userGoals, transaction.SourceGoalId, targetGoalId);
 
+            int goalToCalculateTotalFor = transaction.SourceGoalId.HasValue ? transaction.SourceGoalId.Value : targetGoalId.Value;
+            double currentGoalAmount = CalculateCurrentGoalAmount(goalToCalculateTotalFor);
+
             //If we are withdrawing, make sure we have the funds
             bool userWithdrawingFunds = transaction.SourceGoalId.HasValue && !targetGoalId.HasValue && userGoals != null;
-            double currentGoalAmount = 0;
             if (userWithdrawingFunds)
-                ValidateRemainingFundsForGoalAgainstTransactionAmount(transaction, userGoals, out currentGoalAmount);
+                ValidateRemainingFundsForGoalAgainstTransactionAmount(transaction, userGoals, currentGoalAmount);
 
             //If we reach here, we can add the transaction
             Transaction createdTransaction = transactionRepository.Create(transaction, targetGoalId);
@@ -100,7 +102,7 @@ namespace Saver.Services.Implementations
         private void UpdateAnyNewlySurpassedMilestones(int? targetGoalId, double currentGoalAmount, Transaction createdTransaction)
         {
             IEnumerable<Milestone> newlySurpassedMilestones = GetNewlySurpassedUpdatedMilestones(createdTransaction, targetGoalId, currentGoalAmount);
-            if (newlySurpassedMilestones.Any())
+            if (newlySurpassedMilestones != null && newlySurpassedMilestones.Any())
             {
                 foreach (var milestone in newlySurpassedMilestones)
                 {
@@ -119,12 +121,12 @@ namespace Saver.Services.Implementations
         private IEnumerable<Milestone> GetNewlySurpassedUpdatedMilestones(Transaction transaction, int? targetGoalId, double currentGoalAmount)
         {
             //Get the milestones that have been surpassed
-            IEnumerable<Milestone> newlySurpassedMilestones = null;
+            Milestone[] newlySurpassedMilestones = null;
             IEnumerable<Milestone> surpassedMilestones = GetSurpassedMilestonesForGoal(targetGoalId.Value, currentGoalAmount);
             if (surpassedMilestones != null && surpassedMilestones.Any())
             {
                 //Update the date with now
-                newlySurpassedMilestones = surpassedMilestones.Where(milestone => !milestone.DateMet.HasValue);
+                newlySurpassedMilestones = surpassedMilestones.Where(milestone => !milestone.DateMet.HasValue).ToArray();
                 foreach (var milestone in newlySurpassedMilestones)
                 {
                     milestone.DateMet = transaction.Timestamp;
@@ -153,21 +155,32 @@ namespace Saver.Services.Implementations
         /// <param name="transaction">The transaction we are attempting to create</param>
         /// <param name="userGoals">The goals for the user</param>
         /// <param name="currentGoalAmount">The current goal amount</param>
-        private void ValidateRemainingFundsForGoalAgainstTransactionAmount(Transaction transaction, IEnumerable<Goal> userGoals, out double currentGoalAmount)
+        private void ValidateRemainingFundsForGoalAgainstTransactionAmount(Transaction transaction, IEnumerable<Goal> userGoals, double currentGoalAmount)
         {
-            Goal sourceGoal = userGoals.First(g => g.Id == transaction.SourceGoalId.Value);
-            IEnumerable<Transaction> goalTransactions = GetTransactionsForGoal(sourceGoal.Id);
-
-            double postedToGoal = goalTransactions
-                                    .Where(trans => !trans.SourceGoalId.HasValue || trans.SourceGoalId != sourceGoal.Id)
-                                    .Sum(trans => trans.Amount);
-            double withdrawnFromGoal = goalTransactions
-                                        .Where(trans => trans.SourceGoalId.HasValue && trans.SourceGoalId == sourceGoal.Id)
-                                        .Sum(trans => trans.Amount);
-
-            currentGoalAmount = postedToGoal - withdrawnFromGoal;
             if (currentGoalAmount < transaction.Amount)
                 throw new ArgumentOutOfRangeException(nameof(transaction.Amount), "The amount being withdrawn exceeds the available funds for this goal");
+        }
+
+        /// <summary>
+        /// Calculates the current posted amount for the goal with the given ID
+        /// </summary>
+        /// <param name="goalId">The ID of the goal for which we should calculate the goal amount</param>
+        /// <returns>The amount posted against the goal</returns>
+        private double CalculateCurrentGoalAmount(int goalId)
+        {
+            IEnumerable<Transaction> goalTransactions = GetTransactionsForGoal(goalId);
+
+            double postedToGoal = goalTransactions
+                                    .Where(trans => !trans.SourceGoalId.HasValue || trans.SourceGoalId != goalId)
+                                    .Sum(trans => trans.Amount);
+            double withdrawnFromGoal = goalTransactions
+                                        .Where(trans => trans.SourceGoalId.HasValue && trans.SourceGoalId == goalId)
+                                        .Sum(trans => trans.Amount);
+
+
+            //Calculate the amount
+            double currentGoalAmount = postedToGoal - withdrawnFromGoal;
+            return currentGoalAmount;
         }
 
         /// <summary>
@@ -184,8 +197,8 @@ namespace Saver.Services.Implementations
 
             //Ensure that all goals exist in the user's goal collection
             userGoals = goalRepository.GetGoalsForUser(userId);
-            IEnumerable<int> userGoalIds = userGoals.Select(g => g.Id);
-            if (!(userGoalIds.Intersect(testGoalIds).Count() == testGoalIds.Length))
+            IEnumerable<int> userGoalIds = userGoals?.Select(g => g.Id);
+            if (userGoalIds == null || !(userGoalIds.Intersect(testGoalIds).Count() == testGoalIds.Length))
                 throw new ArgumentOutOfRangeException("One or more goals do not exist in the target user's goal collection");
         }
 
@@ -235,7 +248,7 @@ namespace Saver.Services.Implementations
         /// <param name="amount">The amount to be withdrawn</param>
         /// <param name="goalId">The ID of the goal to withdraw from</param>
         /// <returns>The resulting transaction</returns>
-        public Transaction Withdraw(int userId, int amount, int goalId)
+        public Transaction Withdraw(int userId, double amount, int goalId)
         {
             //Create the appropriate transaction
             Transaction transaction = new Transaction(amount, goalId, DateTime.Now);
@@ -250,7 +263,7 @@ namespace Saver.Services.Implementations
         /// <param name="amount">The amount to be deposited</param>
         /// <param name="goalId">The ID of the goal to which we will add</param>
         /// <returns>The resulting transaction</returns>
-        public Transaction Deposit(int userId, int amount, int goalId)
+        public Transaction Deposit(int userId, double amount, int goalId)
         {
             //Create the appropriate transaction
             Transaction transaction = new Transaction(amount, null, DateTime.Now);
