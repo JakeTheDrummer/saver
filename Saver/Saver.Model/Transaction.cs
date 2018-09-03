@@ -14,6 +14,13 @@ namespace Saver.Model
     public class Transaction
     {
         /// <summary>
+        /// Used by Dapper only
+        /// </summary>
+        public Transaction()
+        {
+        }
+
+        /// <summary>
         /// Creates a new Transaction
         /// </summary>
         /// <param name="id">The ID of the transaction</param>

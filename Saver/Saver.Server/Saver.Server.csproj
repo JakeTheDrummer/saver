@@ -259,6 +259,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\GoalsController.cs" />
     <Compile Include="Controllers\MilestonesController.cs" />
+    <Compile Include="Controllers\TransactionsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

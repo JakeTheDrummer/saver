@@ -35,7 +35,7 @@ namespace Saver.Repositories.Implementations.Transaction
         /// <param name="transaction">The transaction on the system</param>
         /// <param name="targetGoalId">The goal Id to which the transaction should be posted</param>
         /// <returns>The transaction that was created</returns>
-        [SqlResource("Transaction/Create")]
+        [SqlResource("Transaction\\Create")]
         public Model.Transaction Create(Model.Transaction transaction, int? targetGoalId)
         {
             //Set the parameters and
@@ -51,7 +51,7 @@ namespace Saver.Repositories.Implementations.Transaction
         /// </summary>
         /// <param name="id">The ID of the transaction</param>
         /// <returns>The transaction with the given ID</returns>
-        [SqlResource("Transaction/GetById")]
+        [SqlResource("Transaction\\GetById")]
         public Model.Transaction GetById(int id)
         {
             string sql = LoadSqlResources().First().Value;
@@ -67,7 +67,7 @@ namespace Saver.Repositories.Implementations.Transaction
         /// </summary>
         /// <param name="goalId">The ID of the goal</param>
         /// <returns>All transactions for the goal</returns>
-        [SqlResource("Transaction/GetTransactionsForGoal")]
+        [SqlResource("Transaction\\GetTransactionsForGoal")]
         public IEnumerable<Model.Transaction> GetTransactionsForGoal(int goalId)
         {
             string sql = LoadSqlResources().First().Value;
@@ -81,7 +81,7 @@ namespace Saver.Repositories.Implementations.Transaction
         /// </summary>
         /// <param name="userId">The ID of the user</param>
         /// <returns>All transactions for the user</returns>
-        [SqlResource("Transaction/GetTransactionsForUser")]
+        [SqlResource("Transaction\\GetTransactionsForUser")]
         public IEnumerable<Model.Transaction> GetTransactionsForUser(int userId)
         {
             string sql = LoadSqlResources().First().Value;
