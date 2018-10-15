@@ -1,6 +1,8 @@
 {
   "name": "$safeappid$",
-  "app_id": "",
+  "integrations": {
+    "cordova": {}
+  },
   "v2": true,
   "typescript": true
 }
