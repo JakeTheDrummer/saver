@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Your Bank</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <h3 style="text-align:center">Welcome [Username]</h3>
+
+     <div class="center">
+        <p class="ionic-logo"></p>
+    </div>
+
+    <ion-card>
+        <ion-card-header>
+
+          <h2>
+            £[amount] saved to date!
+          </h2>
+          <p>Keep it up!</p>
+        </ion-card-header>
+
+        <ion-grid>
+          <ion-row *ngFor="let goal of goals; let i = index">
+            <ion-col *ngIf="i % 2 == 0">
+              <img [src]="categorie.image" />
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        
+    </ion-card>
+
+	  <button ion-button secondary menuToggle>Menu</button>
+</ion-content>

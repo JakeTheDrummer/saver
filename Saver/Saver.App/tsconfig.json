@@ -4,14 +4,21 @@
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "noStrictGenericChecks": true,
     "lib": [
       "dom",
-      "es2015"
+      "es6"
     ],
-    "module": "es2015",
+    "plugins": [
+      {
+        "transform": "ts-nameof",
+        "type": "raw"
+      }
+    ],
+    "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
-    "target": "es5"
+    "target": "es6"
   },
   "include": [
     "src/**/*.ts"
