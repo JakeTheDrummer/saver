@@ -2,11 +2,9 @@ import { String, StringBuilder } from 'typescript-string-operations';
 import * as $ from "jquery";
 import { Goal } from '../model/goal';
 import { ISaverService } from './saverserviceinterface';
-import { Injectable } from '@angular/core';
 
 /**
  * Provides access to the saver service*/
-@Injectable()
 export class SaverService implements ISaverService {
   baseURI: string;
 

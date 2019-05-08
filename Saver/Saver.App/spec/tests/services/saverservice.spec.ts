@@ -1,6 +1,7 @@
-import { expect } from 'chai';
+import "jasmine";
+import {} from 'chai';
 import { Goal } from '../../../src/model/goal';
-import { SaverService } from '../../../src/services/saver';
+import { SaverService } from '../../../src/services/saverservice';
 
 //Unit testing the saver service
 describe('Unit Testing the Saver Service', () => {
@@ -12,8 +13,8 @@ describe('Unit Testing the Saver Service', () => {
     let service = new SaverService(BASE_URI);
 
     //Assert
-    expect(service).not.to.be(null, 'The service was not created');
-    expect(service.baseUri).to.equal(BASE_URI, 'The service was not created with the correct base URI');
+    expect(service).not.toBe(null, 'The service was not created');
+    expect(service.baseUri()).toBe(BASE_URI, 'The service was not created with the correct base URI');
   });
 
   it('Should return a collection of Goals for a User', () => {
@@ -25,8 +26,7 @@ describe('Unit Testing the Saver Service', () => {
     //Act
     let testGoals: Goal[] = service.getGoalsFor(userId);
     
-
     //Assert
-    expect(testGoals.length).to.equal(5, 'Not all goals were returned');
+    expect(testGoals.length).toBe(5, 'Not all goals were returned');
   });
 });
